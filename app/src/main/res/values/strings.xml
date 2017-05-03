@@ -33,4 +33,14 @@
     <!-- GROUP DETAIL -->
     <string name="group_detail_activity__group_detail_title">Group detail</string>
 
+    <!-- INVITE FRIENDS -->
+    <string name="invite_friends_activity__invite_friends_title">Invite Friends</string>
+    <string name="invite_friends_activity__invitation_title">Shopping Payments</string>
+    <string name="invite_friends_activity__invitation_message">Invite to group</string>
+    <string name="invite_friends_activity__invitation_deep_link">Deep link</string>
+    <string name="invite_friends_activity__invitation_custom_image">custom image</string>
+    <string name="invite_friends_activity__invitation_cta">cta</string>
+    <string name="invite_friends_activity__invite_friend">Invite friend</string>
+    <string name="invite_friends_activity__friends_email">Friend\'s email</string>
+
 </resources>

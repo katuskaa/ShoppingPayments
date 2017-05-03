@@ -48,6 +48,10 @@
             android:label="@string/group_detail_activity__group_detail_title">
         </activity>
 
+        <activity
+            android:name=".screens.invite_friends.InviteFriendsActivity"
+            android:label="@string/invite_friends_activity__invite_friends_title"></activity>
+
     </application>
 
 </manifest>

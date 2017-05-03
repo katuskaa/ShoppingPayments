@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,11 +16,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 
 import katka.shoppingpayments.R;
-import katka.shoppingpayments.screens.add_payment.AddPaymentActivity;
 import katka.shoppingpayments.helpers.MonthDatePickerHelper;
+import katka.shoppingpayments.screens.add_payment.AddPaymentActivity;
 import katka.shoppingpayments.screens.create_group.CreateGroupActivity;
 import katka.shoppingpayments.screens.payments.adapters.PaymentsAdapter;
 import katka.shoppingpayments.screens.show_groups.ShowGroupsActivity;
@@ -48,6 +53,41 @@ public class PaymentsActivity extends AppCompatActivity {
         setMonthDatePicker();
         setSpinnerUser();
         showPayments();
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(AppInvite.API)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }
+                })
+                .build();
+
+//        // Check for App Invite invitations and launch deep-link activity if possible.
+//        // Requires that an Activity is registered in AndroidManifest.xml to handle
+//        // deep-link URLs.
+//        boolean autoLaunchDeepLink = true;
+//        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
+//                .setResultCallback(
+//                        new ResultCallback<AppInviteInvitationResult>() {
+//                            @Override
+//                            public void onResult(AppInviteInvitationResult result) {
+//                                Log.i("TAG", "getInvitation:onResult:" + result.getStatus());
+//                                if (result.getStatus().isSuccess()) {
+//                                    // Extract information from the intent
+//                                    Intent intent = result.getInvitationIntent();
+//                                    String deepLink = AppInviteReferral.getDeepLink(intent);
+//                                    String invitationId = AppInviteReferral.getInvitationId(intent);
+//
+//                                    // Because autoLaunchDeepLink = true we don't have to do anything
+//                                    // here, but we could set that to false and manually choose
+//                                    // an Activity to launch to handle the deep link here.
+//                                    // ...
+//                                }
+//                            }
+//                        });
+
     }
 
     private void startAddPaymentActivity() {

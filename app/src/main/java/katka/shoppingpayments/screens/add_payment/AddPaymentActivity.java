@@ -9,7 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
 
 public class AddPaymentActivity extends AppCompatActivity {
     private EditText editTextPrice;
@@ -51,7 +57,12 @@ public class AddPaymentActivity extends AppCompatActivity {
         } else {
             String price = editTextPrice.getText().toString();
             String shop = editTextShop.getText().toString();
-            //pridat do databazy
+            HashMap<String, String> json = new HashMap<>();
+            json.put("price", price);
+            json.put("shop", shop);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(SharedPreferencesHelper.getUserUid(this)).child("payments");
+            databaseReference.setValue(json);
+            this.finish();
         }
 
     }

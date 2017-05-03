@@ -16,8 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
 import katka.shoppingpayments.screens.payments.PaymentsActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -90,10 +92,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                    saveUserUid();
                     startPaymentActivity();
                 }
             }
         });
+    }
+
+    private void saveUserUid() {
+        SharedPreferencesHelper.saveUserUid(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
 

@@ -1,7 +1,5 @@
 package katka.shoppingpayments.structures;
 
-import org.json.JSONObject;
-
 public class Payment {
     private Long id;
     private String price;
