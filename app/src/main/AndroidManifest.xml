@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="katka.shoppingpayments">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".screens.splash_screen.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".screens.login.LoginActivity"
+            android:label="@string/login_activity__login_title">
+        </activity>
+
+        <activity
+            android:name=".screens.payments.PaymentsActivity"
+            android:label="@string/title_activity_payments"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".screens.add_payment.AddPaymentActivity"
+            android:label="@string/add_payment_activity__add_payment_title">
+        </activity>
+
+        <activity
+            android:name=".screens.create_group.CreateGroupActivity"
+            android:label="@string/create_group_activity__create_group_title">
+        </activity>
+
+        <activity
+            android:name=".screens.show_groups.ShowGroupsActivity"
+            android:label="@string/show_groups_activity__show_groups_title">
+        </activity>
+
+        <activity
+            android:name=".screens.group_detail.GroupDetailActivity"
+            android:label="@string/group_detail_activity__group_detail_title">
+        </activity>
+
+    </application>
+
+</manifest>

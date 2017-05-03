@@ -1,0 +1,36 @@
+<resources>
+
+    <!-- APP -->
+    <string name="app_name">Shopping Payments</string>
+
+    <!-- LOGIN -->
+    <string name="login_activity__login_title">Login</string>
+    <string name="login_activity__login">Login</string>
+    <string name="login_activity__email">E-mail</string>
+    <string name="login_activity__password">Password</string>
+
+    <!-- PAYMENTS -->
+    <string name="title_activity_payments">Payments</string>
+
+    <!-- MENU PAYMENTS -->
+    <string name="menu_payments__create_group">Create group</string>
+    <string name="menu_payments__show_groups">Show groups</string>
+
+    <!-- ADD PAYMENT -->
+    <string name="add_payment_activity__add_payment_title">Add payment</string>
+    <string name="add_payment_activity__shop">Shop</string>
+    <string name="add_payment_activity__price">Price</string>
+    <string name="add_payment_activity__addPayment">Add payment</string>
+
+    <!-- CREATE GROUP -->
+    <string name="create_group_activity__create_group_title">Create group</string>
+    <string name="create_group_activity__create_new_group">Create new group</string>
+    <string name="create_group_activity__group_name">Group name</string>
+
+    <!-- SHOW GROUPS -->
+    <string name="show_groups_activity__show_groups_title">Show groups</string>
+
+    <!-- GROUP DETAIL -->
+    <string name="group_detail_activity__group_detail_title">Group detail</string>
+
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="katka.shoppingpayments.screens.payments.PaymentsActivity">
+
+    <item
+        android:id="@+id/menu_payments__create_group"
+        android:title="@string/menu_payments__create_group"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_payments__show_groups"
+        android:title="@string/menu_payments__show_groups"
+        app:showAsAction="never" />
+
+</menu>

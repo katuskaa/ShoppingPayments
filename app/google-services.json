@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "954375788782",
+    "firebase_url": "https://shoppingpayments-5e7f8.firebaseio.com",
+    "project_id": "shoppingpayments-5e7f8",
+    "storage_bucket": "shoppingpayments-5e7f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954375788782:android:cf215b12f93d5de5",
+        "android_client_info": {
+          "package_name": "katka.shoppingpayments"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954375788782-alc7pqmbif1m3qfaiolqgfph564o7tbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "katka.shoppingpayments",
+            "certificate_hash": "e145f5acd0d9a946f297446ecb8e051360eede01"
+          }
+        },
+        {
+          "client_id": "954375788782-vaod8lpcupca19inmijrsfaa6kd4uekg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwHWq_pK1Dk3TbouGB2qvX0HxkZ2QEFVw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954375788782-vaod8lpcupca19inmijrsfaa6kd4uekg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
