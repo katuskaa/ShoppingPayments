@@ -8,14 +8,14 @@ import android.widget.EditText;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
-public class MonthDatePickerHelper {
+public class DatePickerHelper {
     private Context context;
     private EditText editText;
     private int year;
     private int month;
     private int day;
 
-    public MonthDatePickerHelper(Context context, EditText editText) {
+    public DatePickerHelper(Context context, EditText editText) {
         this.context = context;
         this.editText = editText;
         getCurrentDate();

@@ -1,17 +1,14 @@
 package katka.shoppingpayments.structures;
 
 public class Payment {
-    private Long id;
+    
     private String price;
     private String shop;
+    private String month;
+    private String year;
 
-    public Payment(String price, String shop) {
-        this.price = price;
-        this.shop = shop;
-    }
+    public Payment() {
 
-    public Long getId() {
-        return id;
     }
 
     public String getPrice() {
@@ -28,6 +25,22 @@ public class Payment {
 
     public void setShop(String shop) {
         this.shop = shop;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
 }

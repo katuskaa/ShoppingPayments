@@ -18,6 +18,13 @@ public class ShowGroupsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_groups);
-
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        finish();
+        return true;
+    }
+
 }

@@ -2,9 +2,9 @@ package katka.shoppingpayments.screens.payments;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,14 +16,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import katka.shoppingpayments.R;
-import katka.shoppingpayments.helpers.MonthDatePickerHelper;
+import katka.shoppingpayments.database.FirebaseConstants;
+import katka.shoppingpayments.helpers.DatePickerHelper;
+import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
 import katka.shoppingpayments.screens.add_payment.AddPaymentActivity;
 import katka.shoppingpayments.screens.create_group.CreateGroupActivity;
 import katka.shoppingpayments.screens.payments.adapters.PaymentsAdapter;
@@ -34,7 +38,10 @@ import katka.shoppingpayments.structures.Payment;
 public class PaymentsActivity extends AppCompatActivity {
     private EditText editTextMonth;
     private Spinner spinnerUser;
-    private  ListView listViewPayments;
+    private ListView listViewPayments;
+    private ArrayList<Payment> payments;
+    private PaymentsAdapter paymentsAdapter;
+
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, PaymentsActivity.class);
@@ -48,50 +55,15 @@ public class PaymentsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setFloatingActionButton();
         initiateParameters();
-        setMonthDatePicker();
+        setDatePicker();
         setSpinnerUser();
+        setFloatingActionButton();
         showPayments();
-
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(AppInvite.API)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }
-                })
-                .build();
-
-//        // Check for App Invite invitations and launch deep-link activity if possible.
-//        // Requires that an Activity is registered in AndroidManifest.xml to handle
-//        // deep-link URLs.
-//        boolean autoLaunchDeepLink = true;
-//        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
-//                .setResultCallback(
-//                        new ResultCallback<AppInviteInvitationResult>() {
-//                            @Override
-//                            public void onResult(AppInviteInvitationResult result) {
-//                                Log.i("TAG", "getInvitation:onResult:" + result.getStatus());
-//                                if (result.getStatus().isSuccess()) {
-//                                    // Extract information from the intent
-//                                    Intent intent = result.getInvitationIntent();
-//                                    String deepLink = AppInviteReferral.getDeepLink(intent);
-//                                    String invitationId = AppInviteReferral.getInvitationId(intent);
-//
-//                                    // Because autoLaunchDeepLink = true we don't have to do anything
-//                                    // here, but we could set that to false and manually choose
-//                                    // an Activity to launch to handle the deep link here.
-//                                    // ...
-//                                }
-//                            }
-//                        });
-
     }
 
     private void startAddPaymentActivity() {
-        AddPaymentActivity.startActivity(this);
+        AddPaymentActivity.startActivity(this, getMonth(), getYear());
     }
 
     private void setFloatingActionButton() {
@@ -99,6 +71,7 @@ public class PaymentsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //ak je selected user owner
                 startAddPaymentActivity();
             }
         });
@@ -110,13 +83,20 @@ public class PaymentsActivity extends AppCompatActivity {
         listViewPayments = (ListView) findViewById(R.id.payments_activity__listView);
     }
 
-    private void setMonthDatePicker() {
-        final MonthDatePickerHelper monthDatePickerHelper = new MonthDatePickerHelper(this, editTextMonth);
-        final DatePickerDialog datePickerDialog = monthDatePickerHelper.getCurrentDate();
+    private void setDatePicker() {
+        DatePickerHelper datePickerHelper = new DatePickerHelper(this, editTextMonth);
+        final DatePickerDialog datePickerDialog = datePickerHelper.getCurrentDate();
         editTextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePickerDialog.show();
+            }
+        });
+
+        datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                showPayments();
             }
         });
     }
@@ -132,11 +112,38 @@ public class PaymentsActivity extends AppCompatActivity {
     }
 
     private void showPayments() {
-        ArrayList<Payment> payments = new ArrayList<>();
-        Payment payment = new Payment("12", "samoska");
-        payments.add(payment);
-        payments.add(new Payment("123", "billa"));
-        PaymentsAdapter paymentsAdapter = new PaymentsAdapter(this, payments);
+        payments = new ArrayList<>();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(SharedPreferencesHelper.getUserUid(this)).child(FirebaseConstants.PAYMENTS);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                payments = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Payment payment = snapshot.getValue(Payment.class);
+                    if (payment.getMonth().equals(getMonth()) && payment.getYear().equals(getYear())) {
+                        payments.add(payment);
+                    }
+                    updateListView();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private String getMonth() {
+        return editTextMonth.getText().toString().substring(0, 3);
+    }
+
+    private String getYear() {
+        return editTextMonth.getText().toString().substring(4, editTextMonth.getText().toString().length());
+    }
+
+    private void updateListView() {
+        paymentsAdapter = new PaymentsAdapter(this, payments);
         listViewPayments.setAdapter(paymentsAdapter);
     }
 

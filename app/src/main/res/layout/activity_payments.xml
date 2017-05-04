@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="katka.shoppingpayments.payments.PaymentsActivity">
+    tools:context="katka.shoppingpayments.screens.payments.PaymentsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -40,8 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:layout_weight="1"
-                android:focusable="false"
                 android:clickable="true"
+                android:focusable="false"
                 android:gravity="center_vertical" />
 
             <Spinner

@@ -31,16 +31,25 @@
         <activity
             android:name=".screens.add_payment.AddPaymentActivity"
             android:label="@string/add_payment_activity__add_payment_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".screens.payments.PaymentsActivity" />
         </activity>
 
         <activity
             android:name=".screens.create_group.CreateGroupActivity"
             android:label="@string/create_group_activity__create_group_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".screens.payments.PaymentsActivity" />
         </activity>
 
         <activity
             android:name=".screens.show_groups.ShowGroupsActivity"
             android:label="@string/show_groups_activity__show_groups_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".screens.payments.PaymentsActivity" />
         </activity>
 
         <activity

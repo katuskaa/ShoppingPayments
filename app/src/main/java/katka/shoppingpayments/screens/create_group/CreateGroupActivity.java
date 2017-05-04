@@ -58,4 +58,12 @@ public class CreateGroupActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        finish();
+        return true;
+    }
+
 }
