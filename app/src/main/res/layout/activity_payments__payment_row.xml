@@ -13,7 +13,8 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:gravity="start" />
+        android:gravity="start"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/activity_payments__payment_row__price"
@@ -24,6 +25,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:gravity="end" />
+        android:gravity="end"
+        android:textSize="18sp" />
 
 </LinearLayout>

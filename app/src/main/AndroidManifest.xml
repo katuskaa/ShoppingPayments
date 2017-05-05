@@ -24,7 +24,7 @@
 
         <activity
             android:name=".screens.payments.PaymentsActivity"
-            android:label="@string/title_activity_payments"
+            android:label="@string/payments_activity__payment_title"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
