@@ -18,9 +18,8 @@
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:inputType="numberDecimal">
-
-            <requestFocus />
+            android:inputType="numberDecimal"
+            android:textColor="@color/colorPrimaryDark">
         </EditText>
 
         <EditText
@@ -30,7 +29,8 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:inputType="text"></EditText>
+            android:inputType="text"
+            android:textColor="@color/colorPrimaryDark"></EditText>
 
         <LinearLayout
 
@@ -43,14 +43,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/payments_activity__add_dialog__update" />
+                android:text="@string/payments_activity__add_dialog__update"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/activity_payments__add_dialog__negativeButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/payments_activity__add_dialog__delete" />
+                android:text="@string/payments_activity__add_dialog__delete"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

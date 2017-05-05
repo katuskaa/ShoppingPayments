@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="katka.shoppingpayments.screens.add_payment.AddPaymentActivity">
 
 
@@ -12,28 +12,32 @@
         android:id="@+id/add_payment_activity__price_editText"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:inputType="numberDecimal"
-        android:textColorHint="@color/colorAccent"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:hint="@string/add_payment_activity__price" />
+        android:gravity="center_vertical"
+        android:hint="@string/add_payment_activity__price"
+        android:inputType="numberDecimal"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorAccent" />
 
     <EditText
         android:id="@+id/add_payment_activity__shop_editText"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:inputType="text"
-        android:textColorHint="@color/colorAccent"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:hint="@string/add_payment_activity__shop" />
+        android:gravity="center_vertical"
+        android:hint="@string/add_payment_activity__shop"
+        android:inputType="text"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorAccent" />
 
     <Button
         android:id="@+id/add_payment_activity__add_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:background="@color/colorAccent"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/add_payment_activity__addPayment" />
+        android:background="@color/colorAccent"
+        android:text="@string/add_payment_activity__addPayment"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
 </LinearLayout>
