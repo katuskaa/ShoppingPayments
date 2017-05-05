@@ -19,12 +19,12 @@ import android.widget.Spinner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.database.Database;
 import katka.shoppingpayments.database.FirebaseConstants;
 import katka.shoppingpayments.helpers.DatePickerHelper;
 import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
@@ -113,7 +113,7 @@ public class PaymentsActivity extends AppCompatActivity {
 
     private void showPayments() {
         payments = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(SharedPreferencesHelper.getUserUid(this)).child(FirebaseConstants.PAYMENTS);
+        DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(SharedPreferencesHelper.getUserUid(this)).child(FirebaseConstants.PAYMENTS);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

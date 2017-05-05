@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.database.Database;
 import katka.shoppingpayments.database.FirebaseConstants;
 import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
 import katka.shoppingpayments.structures.Payment;
@@ -69,7 +69,7 @@ public class AddPaymentActivity extends AppCompatActivity {
             payment.setShop(shop);
             payment.setMonth(getIntent().getStringExtra(MONTH_BUNDLE_KEY));
             payment.setYear(getIntent().getStringExtra(YEAR_BUNDLE_KEY));
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(SharedPreferencesHelper.getUserUid(this)).child(FirebaseConstants.PAYMENTS).push();
+            DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(SharedPreferencesHelper.getUserUid(this)).child(FirebaseConstants.PAYMENTS).push();
             databaseReference.setValue(payment);
             this.finish();
         }
