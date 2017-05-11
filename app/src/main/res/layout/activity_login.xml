@@ -12,9 +12,9 @@
         android:layout_height="50dp"
         android:layout_margin="15dp"
         android:gravity="center_vertical"
-        android:inputType="text"
-        android:textColorHint="@color/colorAccent"
-        android:hint="@string/login_activity__email" />
+        android:hint="@string/login_activity__email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/colorAccent" />
 
     <EditText
         android:id="@+id/login_activity__password_editText"
@@ -22,10 +22,9 @@
         android:layout_height="50dp"
         android:layout_margin="15dp"
         android:gravity="center_vertical"
+        android:hint="@string/login_activity__password"
         android:inputType="textPassword"
-        android:textColorHint="@color/colorAccent"
-        android:hint="@string/login_activity__password" />
-
+        android:textColorHint="@color/colorAccent" />
 
     <Button
         android:id="@+id/login_activity__login_button"

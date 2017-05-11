@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -38,7 +40,7 @@ import katka.shoppingpayments.screens.add_payment.AddPaymentActivity;
 import katka.shoppingpayments.screens.create_group.CreateGroupActivity;
 import katka.shoppingpayments.screens.payments.adapters.PaymentsAdapter;
 import katka.shoppingpayments.screens.show_groups.ShowGroupsActivity;
-import katka.shoppingpayments.structures.FriendUser;
+import katka.shoppingpayments.structures.Member;
 import katka.shoppingpayments.structures.Payment;
 
 public class PaymentsActivity extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class PaymentsActivity extends AppCompatActivity {
     private ArrayList<Payment> payments;
     private PaymentsAdapter paymentsAdapter;
     private DatabaseReference databaseReference;
+    private Member selectedMember;
 
 
     public static void startActivity(Context context) {
@@ -81,10 +84,19 @@ public class PaymentsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ak je selected user owner
-                startAddPaymentActivity();
+                if (isOwner()) {
+                    startAddPaymentActivity();
+                } else {
+                    CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_payments__coordinatorLayout);
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.payments_activity__not_owner, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
             }
         });
+    }
+
+    private boolean isOwner() {
+        return selectedMember.getUid().equals(SharedPreferencesHelper.getUserUid(this));
     }
 
     private void initiateParameters() {
@@ -112,13 +124,29 @@ public class PaymentsActivity extends AppCompatActivity {
     }
 
     private void setSpinnerUser() {
-        ArrayList<FriendUser> friendUsers = new ArrayList<>();
-        friendUsers.add(new FriendUser("katka"));
-        friendUsers.add(new FriendUser("petko"));
-        ArrayAdapter<FriendUser> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        userArrayAdapter.addAll(friendUsers);
+        final ArrayList<Member> members = new ArrayList<>();
+        final Member owner = new Member();
+        owner.setNickname("Katušiak");
+        owner.setUid(SharedPreferencesHelper.getUserUid(this));
+        Member member = new Member();
+        member.setNickname("Peťušiak");
+        members.add(owner);
+        members.add(member);
+        ArrayAdapter<Member> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        userArrayAdapter.addAll(members);
         userArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUser.setAdapter(userArrayAdapter);
+        spinnerUser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedMember = members.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedMember = owner;
+            }
+        });
     }
 
     private void showPayments() {

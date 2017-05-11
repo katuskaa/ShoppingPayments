@@ -16,11 +16,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.database.Database;
+import katka.shoppingpayments.database.FirebaseConstants;
 import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
+import katka.shoppingpayments.screens.nickname.NicknameActivity;
 import katka.shoppingpayments.screens.payments.PaymentsActivity;
+import katka.shoppingpayments.structures.User;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmail;
@@ -45,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         this.finish();
     }
 
+    private void startNicknameActivity() {
+        NicknameActivity.startActivity(this);
+        this.finish();
+    }
+
     private void initiateParameters() {
         editTextEmail = (EditText) findViewById(R.id.login_activity__email_editText);
         editTextPassword = (EditText) findViewById(R.id.login_activity__password_editText);
@@ -58,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                 editTextEmail.setTextColor(Color.BLACK);
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
-                if (isValidEmail(email) && isValidPassword(password)) {
+                if (isValidEmail(email) && isNotEmpty(password, editTextPassword)) {
                     firebaseAuthentication(email, password);
                 }
             }
@@ -77,15 +90,15 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean isValidPassword(String password) {
-        if (password.isEmpty()) {
-            editTextPassword.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+    private boolean isNotEmpty(String text, EditText editText) {
+        if (text.isEmpty()) {
+            editText.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
             return false;
         }
         return true;
     }
 
-    private void firebaseAuthentication(String email, String password) {
+    private void firebaseAuthentication(final String email, final String password) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Task<AuthResult> authResultTask = firebaseAuth.createUserWithEmailAndPassword(email, password);
         authResultTask.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -93,15 +106,45 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-                    saveUserUid();
-                    startPaymentActivity();
+                    saveUser(email, password, task.getResult().getUser().getUid());
+                    saveUserUid(task.getResult().getUser().getUid());
+                    startNicknameActivity();
+                } else {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password);
+                    DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.USERS);
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                User user = snapshot.getValue(User.class);
+                                if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                                    saveUserUid(user.getUid());
+                                    startPaymentActivity();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
         });
     }
 
-    private void saveUserUid() {
-        SharedPreferencesHelper.saveUserUid(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void saveUserUid(String uid) {
+        SharedPreferencesHelper.saveUserUid(this, uid);
+    }
+
+    private void saveUser(String email, String password, String uid) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setUid(uid);
+        DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.USERS).push();
+        databaseReference.setValue(user);
     }
 
 

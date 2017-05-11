@@ -9,9 +9,18 @@
     <string name="login_activity__email">E-mail</string>
     <string name="login_activity__password">Password</string>
 
+    <!-- NICKNAME -->
+    <string name="nickname_activity__nickname_title">Nickname</string>
+    <string name="nickname_activity__nickname">@string/nickname_activity__nickname_title</string>
+    <string name="nickname_activity__set_nickname">Set nickname</string>
+
     <!-- PAYMENTS -->
     <string name="payments_activity__payment_title">Payments</string>
     <string name="payments_activity__total_sum">Total sum:</string>
+    <string name="payments_activity__add_dialog__update">Update</string>
+    <string name="payments_activity__add_dialog__cancel">Cancel</string>
+    <string name="payments_activity__add_dialog__delete">Delete</string>
+    <string name="payments_activity__not_owner">You are not owner!</string>
 
     <!-- MENU PAYMENTS -->
     <string name="menu_payments__create_group">Create group</string>
@@ -43,9 +52,5 @@
     <string name="invite_friends_activity__invitation_cta">cta</string>
     <string name="invite_friends_activity__invite_friend">Invite friend</string>
     <string name="invite_friends_activity__friends_email">Friend\'s email</string>
-    <string name="payments_activity__add_dialog__update">Update</string>
-    <string name="payments_activity__add_dialog__cancel">Cancel</string>
-    <string name="payments_activity__add_dialog__delete">Delete</string>
-
 
 </resources>
