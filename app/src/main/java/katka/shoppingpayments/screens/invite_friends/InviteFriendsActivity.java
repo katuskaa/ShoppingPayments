@@ -2,26 +2,37 @@ package katka.shoppingpayments.screens.invite_friends;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import katka.shoppingpayments.R;
+import katka.shoppingpayments.database.Database;
+import katka.shoppingpayments.database.FirebaseConstants;
+import katka.shoppingpayments.helpers.shared_preferences.SharedPreferencesHelper;
+import katka.shoppingpayments.structures.Group;
+import katka.shoppingpayments.structures.Member;
 
 public class InviteFriendsActivity extends AppCompatActivity {
 
-    private static final int REQUEST_INVITE = 1;
+    private static final String GROUP_NAME = "GROUP_NAME";
 
     private EditText editTextFriendName;
     private Button buttonInviteFriend;
 
-    public static void startActivity(Context context) {
+    public static void startActivity(Context context, String groupName) {
         Intent intent = new Intent(context, InviteFriendsActivity.class);
+        intent.putExtra(GROUP_NAME, groupName);
         context.startActivity(intent);
     }
 
@@ -43,17 +54,57 @@ public class InviteFriendsActivity extends AppCompatActivity {
         buttonInviteFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSendAppInvitationActivityForResult();
+                String friendEmail = editTextFriendName.getText().toString();
+                if (isNotEmpty(friendEmail, editTextFriendName)) {
+                    addGroupWithMember(friendEmail);
+                }
             }
         });
     }
 
-    private void startSendAppInvitationActivityForResult() {
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invite_friends_activity__invitation_title))
-                .setMessage(getString(R.string.invite_friends_activity__invitation_message))
-                .setDeepLink(Uri.parse("https://play.google.com/store/apps/details?id=air.com.sgn.familyguy.gp&hl=en"))
-                .setCallToActionText(getString(R.string.invite_friends_activity__invitation_cta))
-                .build();
-        startActivityForResult(intent, REQUEST_INVITE);
+    private boolean isNotEmpty(String text, EditText editText) {
+        if (text.isEmpty()) {
+            editText.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            return false;
+        }
+        return true;
     }
+
+    private void addGroupWithMember(final String friendEmail) {
+        DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.MEMBERS);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Member member = snapshot.getValue(Member.class);
+                    if (member.getEmail().equals(friendEmail)) {
+                        addGroup(member);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addGroup(Member friendUser) {
+        ArrayList<Member> members = new ArrayList<>();
+        Member member = new Member();
+        member.setNickname(SharedPreferencesHelper.getUserNickname(this));
+        member.setUid(SharedPreferencesHelper.getUserUid(this));
+        member.setEmail(SharedPreferencesHelper.getUserEmail(this));
+        members.add(member);
+        members.add(friendUser);
+        Group group = new Group();
+        group.setName(getIntent().getStringExtra(GROUP_NAME));
+        group.setMembers(members);
+        DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.GROUPS).push();
+        databaseReference.setValue(group);
+        this.finish();
+    }
+
 }

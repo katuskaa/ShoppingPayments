@@ -30,8 +30,8 @@ public class CreateGroupActivity extends AppCompatActivity {
         setButtonCreateGroup();
     }
 
-    private void startInviteFriendsActivity() {
-        InviteFriendsActivity.startActivity(this);
+    private void startInviteFriendsActivity(String groupName) {
+        InviteFriendsActivity.startActivity(this, groupName);
         this.finish();
     }
 
@@ -40,9 +40,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         buttonCreateGroup = (Button) findViewById(R.id.create_group_activity__create_new_group_button);
     }
 
-    private boolean isGroupNameFilled() {
-        if (editTextGroupName.getText().toString().isEmpty()) {
-            editTextGroupName.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+    private boolean isGroupNameFilled(String groupName, EditText editText) {
+        if (groupName.isEmpty()) {
+            editText.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
             return false;
         }
         return true;
@@ -52,8 +52,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         buttonCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isGroupNameFilled()) {
-                    startInviteFriendsActivity();
+                String groupName = editTextGroupName.getText().toString();
+                if (isGroupNameFilled(groupName, editTextGroupName)) {
+                    startInviteFriendsActivity(groupName);
                 }
             }
         });

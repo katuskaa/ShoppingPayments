@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -40,19 +41,23 @@ import katka.shoppingpayments.screens.add_payment.AddPaymentActivity;
 import katka.shoppingpayments.screens.create_group.CreateGroupActivity;
 import katka.shoppingpayments.screens.payments.adapters.PaymentsAdapter;
 import katka.shoppingpayments.screens.show_groups.ShowGroupsActivity;
+import katka.shoppingpayments.structures.Group;
 import katka.shoppingpayments.structures.Member;
 import katka.shoppingpayments.structures.Payment;
 
 public class PaymentsActivity extends AppCompatActivity {
     private EditText editTextMonth;
     private Spinner spinnerUser;
+    private Spinner spinnerGroup;
     private ListView listViewPayments;
     private TextView textViewSum;
     private HashMap<String, Payment> paymentsMap;
     private ArrayList<Payment> payments;
-    private PaymentsAdapter paymentsAdapter;
     private DatabaseReference databaseReference;
+    private Group selectedGroup;
     private Member selectedMember;
+    private ArrayList<Group> groups;
+    private ArrayList<Member> members;
 
 
     public static void startActivity(Context context) {
@@ -69,7 +74,7 @@ public class PaymentsActivity extends AppCompatActivity {
 
         initiateParameters();
         setDatePicker();
-        setSpinnerUser();
+        setSpinnerGroup();
         setFloatingActionButton();
         showPayments();
         setListViewPaymentsUpdate();
@@ -80,7 +85,7 @@ public class PaymentsActivity extends AppCompatActivity {
     }
 
     private void setFloatingActionButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +107,7 @@ public class PaymentsActivity extends AppCompatActivity {
     private void initiateParameters() {
         editTextMonth = (EditText) findViewById(R.id.payments_activity__month_editText);
         spinnerUser = (Spinner) findViewById(R.id.payments_activity__user_spinner);
+        spinnerGroup = (Spinner) findViewById(R.id.payments_activity__group_spinner);
         listViewPayments = (ListView) findViewById(R.id.payments_activity__listView);
         textViewSum = (TextView) findViewById(R.id.payments_activity__sum_textView);
     }
@@ -123,15 +129,53 @@ public class PaymentsActivity extends AppCompatActivity {
         });
     }
 
-    private void setSpinnerUser() {
-        final ArrayList<Member> members = new ArrayList<>();
-        final Member owner = new Member();
-        owner.setNickname("Katušiak");
-        owner.setUid(SharedPreferencesHelper.getUserUid(this));
-        Member member = new Member();
-        member.setNickname("Peťušiak");
-        members.add(owner);
-        members.add(member);
+    private void setSpinnerGroup() {
+        DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.GROUPS);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                groups = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Group group = snapshot.getValue(Group.class);
+                    ArrayList<Member> members = group.getMembers();
+                    for (Member member : members) {
+                        if (member.getUid().equals(SharedPreferencesHelper.getUserUid(getApplicationContext()))) {
+                            groups.add(group);
+                            break;
+                        }
+                    }
+                }
+                updateSpinnerGroup();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void updateSpinnerGroup() {
+        ArrayAdapter<Group> groupArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        groupArrayAdapter.addAll(groups);
+        groupArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGroup.setAdapter(groupArrayAdapter);
+
+        spinnerGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedGroup = groups.get(position);
+                updateSpinnerMember();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void updateSpinnerMember() {
+        members = selectedGroup.getMembers();
         ArrayAdapter<Member> userArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         userArrayAdapter.addAll(members);
         userArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,7 +188,6 @@ public class PaymentsActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                selectedMember = owner;
             }
         });
     }
@@ -183,7 +226,7 @@ public class PaymentsActivity extends AppCompatActivity {
 
     private void updateListView() {
         textViewSum.setText(getPaymentSum());
-        paymentsAdapter = new PaymentsAdapter(this, payments);
+        PaymentsAdapter paymentsAdapter = new PaymentsAdapter(this, payments);
         listViewPayments.setAdapter(paymentsAdapter);
     }
 
@@ -270,6 +313,11 @@ public class PaymentsActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
 

@@ -28,6 +28,7 @@
 
         <activity
             android:name=".screens.payments.PaymentsActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/payments_activity__payment_title"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

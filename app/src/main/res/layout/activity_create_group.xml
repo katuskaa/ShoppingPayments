@@ -15,7 +15,7 @@
         android:layout_margin="15dp"
         android:ems="10"
         android:hint="@string/create_group_activity__group_name"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:textColorHint="@color/colorAccent" />
 
     <Button

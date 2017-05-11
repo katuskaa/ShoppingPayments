@@ -17,4 +17,30 @@ public class SharedPreferencesHelper {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPreferences.getString(SharedPreferencesConstants.USER_UID, "");
     }
+
+    public static void saveUserNickname(Context context, String userUid) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SharedPreferencesConstants.USER_NICKNAME, userUid);
+        editor.apply();
+    }
+
+    public static String getUserNickname(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getString(SharedPreferencesConstants.USER_NICKNAME, "");
+    }
+
+    public static void saveUserEmail(Context context, String userUid) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SharedPreferencesConstants.USER_EMAIL, userUid);
+        editor.apply();
+    }
+
+    public static String getUserEmail(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getString(SharedPreferencesConstants.USER_EMAIL, "");
+    }
+
 }
+

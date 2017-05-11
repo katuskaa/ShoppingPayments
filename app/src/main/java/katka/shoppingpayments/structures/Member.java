@@ -2,11 +2,20 @@ package katka.shoppingpayments.structures;
 
 
 public class Member {
+    private String email;
     private String nickname;
     private String uid;
 
     public Member() {
 
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNickname() {

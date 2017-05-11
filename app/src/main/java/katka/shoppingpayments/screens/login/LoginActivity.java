@@ -53,8 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private void startNicknameActivity() {
-        NicknameActivity.startActivity(this);
+    private void startNicknameActivity(String email) {
+        NicknameActivity.startActivity(this, email);
         this.finish();
     }
 
@@ -108,7 +108,8 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
                     saveUser(email, password, task.getResult().getUser().getUid());
                     saveUserUid(task.getResult().getUser().getUid());
-                    startNicknameActivity();
+                    saveUserEmail(email);
+                    startNicknameActivity(email);
                 } else {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password);
                     DatabaseReference databaseReference = Database.getFirebaseDatabase().getReference(FirebaseConstants.USERS);
@@ -119,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                                 User user = snapshot.getValue(User.class);
                                 if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
                                     saveUserUid(user.getUid());
+                                    saveUserEmail(user.getEmail());
                                     startPaymentActivity();
                                 }
                             }
@@ -136,6 +138,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveUserUid(String uid) {
         SharedPreferencesHelper.saveUserUid(this, uid);
+    }
+
+    private void saveUserEmail(String email) {
+        SharedPreferencesHelper.saveUserEmail(this, email);
     }
 
     private void saveUser(String email, String password, String uid) {
